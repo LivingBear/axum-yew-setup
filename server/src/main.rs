@@ -3,7 +3,7 @@ use server::router::get_router;
 use server::structs::opt_struct::Opt;
 use std::net::{IpAddr, Ipv6Addr, SocketAddr};
 use std::str::FromStr;
-use server::database::{connect_to_db};
+// use server::database::{connect_to_db};
 
 #[tokio::main]
 

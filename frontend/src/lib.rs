@@ -1,6 +1,7 @@
 pub mod components {
     pub mod head;
     pub mod header;
+    pub mod tailwind_header;
     pub mod footer;
     pub mod requests {
         pub mod hi;

@@ -1,3 +1,4 @@
+use frontend::components::tailwind_header::TailwindHeaderComponent;
 use frontend::pages::private::users::UsersPage;
 use yew::prelude::*;
 use yew_router::prelude::*;
@@ -12,7 +13,7 @@ use frontend::pages::public::email::EmailPage;
 use frontend::pages::private::admin::AdminPage;
 use frontend::components::requests::hi::HiServer;
 use frontend::components::requests::email_data::EmailData;
-use frontend::components::header::HeaderComponent;
+// use frontend::components::header::HeaderComponent;
 use frontend::components::footer::FooterComponent;
 
 #[derive(Clone, Routable, PartialEq)]
@@ -67,7 +68,7 @@ fn app() -> Html {
         
         <>
         <section class="wrapper">
-            <HeaderComponent />
+            <TailwindHeaderComponent />
                 <main>
                     <BrowserRouter>
                         <Switch<Route> render={switch} />
