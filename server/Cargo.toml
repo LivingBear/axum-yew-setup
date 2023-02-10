@@ -15,4 +15,14 @@ tower = "0.4.13"
 tower-http = { version = "0.3.5", features = ["full"] }
 tracing = "0.1.37"
 tracing-subscriber = "0.3.16"
+async-smtp = "0.6.0"
+async-std = { version = "1.11", features = ["unstable", "attributes"] }
+sqlx = { version = "0.6", features = [ "runtime-tokio-native-tls" , "postgres" ] }
+tokio-postgres = "0.7.7"
+bcrypt = "0.13"
 
+[dev-dependencies]
+glob = "^0.3"
+criterion = "^0.3"
+async-std = { version = "1.11", features = ["unstable", "attributes"] }
+tokio = { version = "1", features = ["fs", "rt", "time", "net", "macros"] }

@@ -1,80 +1,84 @@
-use gloo_net::http::Request;
-use wasm_bindgen_futures::spawn_local;
+use frontend::pages::private::users::UsersPage;
 use yew::prelude::*;
 use yew_router::prelude::*;
+use frontend::pages::public::contact::ContactPage;
+use frontend::pages::public::login::LoginPage;
+use frontend::pages::public::home::HomePage;
+use frontend::pages::public::about::AboutPage;
+use frontend::pages::public::registration::RegistrationPage;
+use frontend::pages::public::products::ProductsPage;
+use frontend::pages::public::services::ServicesPage;
+use frontend::pages::public::email::EmailPage;
+use frontend::pages::private::admin::AdminPage;
+use frontend::components::requests::hi::HiServer;
+use frontend::components::requests::email_data::EmailData;
+use frontend::components::header::HeaderComponent;
+use frontend::components::footer::FooterComponent;
 
 #[derive(Clone, Routable, PartialEq)]
 enum Route {
     #[at("/")]
     Home,
-    #[at("/hello-server")]
-    HelloServer,
+    #[at("/login")]
+    LoginPage,
+    #[at("/register")]
+    RegistrationPage,
+    #[at("/products")]
+    ProductsPage,
+    #[at("/services")]
+    ServicesPage,
+    #[at("/about")]
+    AboutPage,
+    #[at("/contact")]
+    ContactPage,
+    #[at("/email")]
+    EmailPage,
+    #[at("/hi-server")]
+    HiServer,
+    #[at("/get_email_list")]
+    EmailData,
+    #[at("/admin")]
+    AdminPage,
+    #[at("/users")]
+    UsersPage
+
 }
 
 fn switch(routes: Route) -> Html {
     match routes {
-        Route::Home => html! { <h1>{ "Hello Frontend" }</h1> },
-        Route::HelloServer => html! { <HelloServer /> },
+        Route::Home => html! { <HomePage/> },
+        Route::HiServer => html! { <HiServer /> },
+        Route::EmailData => html! { <EmailData /> },
+        Route::LoginPage => html! {<LoginPage />  },
+        Route::AboutPage => html! {<AboutPage />  },
+        Route::ProductsPage => html! {<ProductsPage />  },
+        Route::ServicesPage => html! {<ServicesPage />  },
+        Route::RegistrationPage => html! {<RegistrationPage />  },
+        Route::ContactPage => html! {<ContactPage />  },
+        Route::EmailPage => html! {<EmailPage />  },
+        Route::AdminPage => html! {<AdminPage />  },
+        Route::UsersPage => html! {<UsersPage />  }
     }
 }
 
 #[function_component(App)]
 fn app() -> Html {
     html! {
-        <BrowserRouter>
-            <Switch<Route> render={switch} />
-        </BrowserRouter>
+        
+        <>
+        <section class="wrapper">
+            <HeaderComponent />
+                <main>
+                    <BrowserRouter>
+                        <Switch<Route> render={switch} />
+                    </BrowserRouter>
+                </main>
+            <FooterComponent />
+        </section>
+        </>
     }
 }
 
-#[function_component(HelloServer)]
-fn hello_server() -> Html {
-    let data = use_state(|| None);
-
-    // Request `/api/hello` once
-    {
-        let data = data.clone();
-        use_effect(move || {
-            if data.is_none() {
-                spawn_local(async move {
-                    let resp = Request::get("/api/hello").send().await.unwrap();
-                    let result = {
-                        if !resp.ok() {
-                            Err(format!(
-                                "Error fetching data {} ({})",
-                                resp.status(),
-                                resp.status_text()
-                            ))
-                        } else {
-                            resp.text().await.map_err(|err| err.to_string())
-                        }
-                    };
-                    data.set(Some(result));
-                });
-            }
-
-            || {}
-        });
-    }
-
-    match data.as_ref() {
-        None => {
-            html! {
-                <div>{"No server response"}</div>
-            }
-        }
-        Some(Ok(data)) => {
-            html! {
-                <div>{"Got server response: "}{data}</div>
-            }
-        }
-        Some(Err(err)) => {
-            html! {
-                <div>{"Error requesting data from server: "}{err}</div>
-            }
-        }
-    }
-}
 
 fn main() {
     wasm_logger::init(wasm_logger::Config::new(log::Level::Trace));
