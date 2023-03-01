@@ -1,5 +1,7 @@
 pub mod routes {
     pub mod hi;
+    pub mod user;
+
     pub mod email {
         pub mod get_email_list;
     }
@@ -32,6 +34,10 @@ pub mod services {
     pub mod services {}
 }
 
-pub mod database;
+pub mod database {
+    pub mod postgres;
+    pub mod mongo;
+}
+
 pub mod router;
 

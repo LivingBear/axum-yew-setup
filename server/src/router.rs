@@ -11,8 +11,12 @@ use tower_http::trace::TraceLayer;
 
 use crate::routes::hi::hi_route;
 use crate::routes::email::get_email_list::get_email_list;
-use crate::routes::auth::login;
-use crate::routes::auth::register;
+use crate::routes::user::{create_user, get_user, update_user, delete_user};
+// use crate::routes::auth::login::login;
+// use crate::routes::auth::register::register;
+
+// use crate::routes::auth::login;
+// use crate::routes::auth::register;
 use crate::structs::opt_struct::Opt;
 use tower_http::services::ServeDir;
 
@@ -20,7 +24,8 @@ pub async fn get_router() -> Router {
     Router::new()
         .route("/api/hi", get(hi_route))
         .route("/api/get_email_list", get(get_email_list))
-        // .route("/api/get_users", get())
+        .route("/api/user", get(get_user).post(create_user))
+        .route("/api/user/:id", get(get_user).patch(update_user).delete(delete_user))
         .fallback_service(get(fallback_service))
         .layer(ServiceBuilder::new().layer(TraceLayer::new_for_http()))
         // Authorize requests using `MyAuth`

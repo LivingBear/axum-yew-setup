@@ -3,12 +3,15 @@ use server::router::get_router;
 use server::structs::opt_struct::Opt;
 use std::net::{IpAddr, Ipv6Addr, SocketAddr};
 use std::str::FromStr;
-// use server::database::{connect_to_db};
+use server::database::mongo::{make_client, create_mongodb_client};
 
 #[tokio::main]
-
-async fn main() {
-    // println!("{}",_db);
+async fn main()  {
+    // Set up a MongoDB client
+    let db_client = create_mongodb_client().await;
+    dbg!(&db_client);
+    // client_options.app_name = Some("myapp".to_string()); // Set the application name
+    // let client = Client::with_options(client_options);
     let opt = Opt::parse();
     println!("{:?}", opt);
     println!("after _db initialized");

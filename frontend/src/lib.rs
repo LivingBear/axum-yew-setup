@@ -1,7 +1,6 @@
 pub mod components {
     pub mod head;
     pub mod header;
-    pub mod tailwind_header;
     pub mod footer;
     pub mod requests {
         pub mod hi;
@@ -12,7 +11,6 @@ pub mod components {
         pub mod register;
     }
     pub mod generic {
-        pub mod loading;
         pub mod error {
             pub mod no_response;
             pub mod some_error_response;

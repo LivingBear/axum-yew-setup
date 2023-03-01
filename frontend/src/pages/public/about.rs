@@ -4,7 +4,11 @@ use yew::prelude::*;
 pub fn about_page() -> Html {
     html! {
         <>
-        {"Hi from about"}
+        <header class={classes!("w-100", "black-bg")}>
+            <h1>
+                {"About Page"}
+            </h1>        
+        </header>
         </>
     }
 }

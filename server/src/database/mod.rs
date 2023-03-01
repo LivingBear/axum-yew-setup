@@ -1,8 +1,10 @@
 use crate::error::AuthError;
-
+use super::Db;
 use async_trait::async_trait;
 
+pub mod mongo;
 pub mod postgres;
+
 
 /// A type that abstracts a database.
 #[async_trait]
