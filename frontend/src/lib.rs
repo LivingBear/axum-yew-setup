@@ -5,10 +5,12 @@ pub mod components {
     pub mod requests {
         pub mod hi;
         pub mod email_data;
+        pub mod register;
     }
     pub mod auth {
         pub mod login;
         pub mod register;
+        pub mod new_register;
     }
     pub mod generic {
         pub mod error {
@@ -21,7 +23,9 @@ pub mod components {
     }
     //other components
 }
-
+pub mod elements {
+    pub mod text_input;
+}
 pub mod pages {
     pub mod public {
         pub mod login;

@@ -41,7 +41,7 @@ pub struct ErrorResponse {
 
 
 pub async fn create_user() -> String  {
-    "create user".to_owned()
+    "create user (REGISTER CALLED)".to_owned()
 
     // let collection = client.database("my_db").collection("users");
     // let document = doc! {

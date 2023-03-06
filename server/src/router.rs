@@ -3,17 +3,22 @@ use std::path::PathBuf;
 
 use axum::body::{Body, boxed, BoxBody};
 use axum::http::{StatusCode, Response, Request};
-use axum::{routing::get, Router};
-use clap::Parser;
-use tower::{ServiceBuilder, ServiceExt};
-use tower_http::trace::TraceLayer;
+use axum::{routing::get, routing::post, Router};
+use axum::error_handling::HandleErrorLayer;
+use axum::response::IntoResponse;
 
+use clap::Parser;
+use tower::{ServiceBuilder, ServiceExt, BoxError};
+use tower_http::trace::TraceLayer;
+use tokio::time::Duration;
 
 use crate::routes::hi::hi_route;
 use crate::routes::email::get_email_list::get_email_list;
 use crate::routes::user::{create_user, get_user, update_user, delete_user};
 // use crate::routes::auth::login::login;
-// use crate::routes::auth::register::register;
+use crate::routes::auth::register::registration_mirror;
+use crate::routes::auth::auth::auth_routes;
+
 
 // use crate::routes::auth::login;
 // use crate::routes::auth::register;
@@ -24,10 +29,22 @@ pub async fn get_router() -> Router {
     Router::new()
         .route("/api/hi", get(hi_route))
         .route("/api/get_email_list", get(get_email_list))
+        .route("/api/register", post(registration_mirror))
         .route("/api/user", get(get_user).post(create_user))
         .route("/api/user/:id", get(get_user).patch(update_user).delete(delete_user))
+        .nest("/auth", auth_routes())
+        .layer(
+            ServiceBuilder::new()
+                // Handle errors from middleware
+                .layer(HandleErrorLayer::new(handle_error))
+                .layer(TraceLayer::new_for_http())
+                .load_shed()
+                .concurrency_limit(1024)
+                .timeout(Duration::from_secs(10))
+                .into_inner(),
+        )
         .fallback_service(get(fallback_service))
-        .layer(ServiceBuilder::new().layer(TraceLayer::new_for_http()))
+        .layer(ServiceBuilder::new())
         // Authorize requests using `MyAuth`
 }
 
@@ -63,4 +80,22 @@ async fn fallback_service(req: Request<Body>) -> Response<BoxBody> {
             .expect("error response"),
     }
 
+}
+
+async fn handle_error(error: BoxError) -> impl IntoResponse {
+    if error.is::<tower::timeout::error::Elapsed>() {
+        return (StatusCode::REQUEST_TIMEOUT, String::from("request timed out"));
+    }
+
+    if error.is::<tower::load_shed::error::Overloaded>() {
+        return (
+            StatusCode::SERVICE_UNAVAILABLE,
+            String::from("service is overloaded, try again later"),
+        );
+    }
+
+    (
+        StatusCode::INTERNAL_SERVER_ERROR,
+        String::from(format!("Unhandled internal error: {}", error)),
+    )
 }

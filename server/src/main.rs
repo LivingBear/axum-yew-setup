@@ -1,20 +1,21 @@
+use dotenv::dotenv;
 use clap::Parser;
 use server::router::get_router;
 use server::structs::opt_struct::Opt;
 use std::net::{IpAddr, Ipv6Addr, SocketAddr};
 use std::str::FromStr;
-use server::database::mongo::{make_client, create_mongodb_client};
+use server::utils::globals::{init_jwt_secret, init_mongo_session};
 
 #[tokio::main]
 async fn main()  {
     // Set up a MongoDB client
-    let db_client = create_mongodb_client().await;
-    dbg!(&db_client);
+    dotenv().ok();
+    init_mongo_session().await;
+    init_jwt_secret().await;
+
     // client_options.app_name = Some("myapp".to_string()); // Set the application name
     // let client = Client::with_options(client_options);
     let opt = Opt::parse();
-    println!("{:?}", opt);
-    println!("after _db initialized");
     // Setup logging & RUST_LOG from args
     if std::env::var("RUST_LOG").is_err() {
         std::env::set_var("RUST_LOG", format!("{},hyper=info,mio=info", opt.log_level))
@@ -35,3 +36,6 @@ async fn main()  {
     // let _client = connect_to_db().await.expect("error connecting to db.");
     // dbg!(_client);
 }
+
+
+

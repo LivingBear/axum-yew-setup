@@ -1,3 +1,6 @@
+#[macro_use(lazy_static)]
+extern crate lazy_static;
+
 pub mod routes {
     pub mod hi;
     pub mod user;
@@ -6,6 +9,7 @@ pub mod routes {
         pub mod get_email_list;
     }
     pub mod auth {
+        pub mod auth;
         pub mod login;
         pub mod register;
     }
@@ -24,15 +28,6 @@ pub mod structs {
         pub mod user_struct;
     }
 }
-pub mod services {
-    pub mod email {
-        pub mod smtp;
-    }
-    pub mod auth {}
-    pub mod orders {}
-    pub mod products {}
-    pub mod services {}
-}
 
 pub mod database {
     pub mod postgres;
@@ -40,4 +35,6 @@ pub mod database {
 }
 
 pub mod router;
-
+pub mod utils {
+    pub mod globals;
+}

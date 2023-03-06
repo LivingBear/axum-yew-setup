@@ -1,20 +1,21 @@
-use gloo_net::http::Method::GET;
+use crate::components::generic::success::some_response::some_server_response;
+use crate::models::components::server_request::RegistrationRequest;
+use gloo_net::http::Method::POST;
 
 use yew::prelude::*;
 
 use wasm_bindgen_futures::spawn_local;
 
 use crate::components::generic::error::some_error_response::some_error_reponse;
-use crate::components::generic::success::some_response::some_server_response;
 use crate::{
     components::generic::error::no_response::no_server_response,
     models::components::server_request::ServerRequest,
 };
 
-#[function_component(EmailData)]
-pub fn email_data() -> Html {
+#[function_component(RegisterRequest)]
+pub fn register_request() -> Html {
     let data = use_state(|| None);
-    // Request `/api/get_email_list` once
+    // Request `/api/register` once
     {
         let data = data.clone();
         use_effect(move || {
@@ -22,13 +23,14 @@ pub fn email_data() -> Html {
                 spawn_local(async move {
                     let mut request = ServerRequest {
                         data: None,
-                        url: "/api/get_email_list".to_string(),
-                        method: GET,
+                        url: "/api/register".to_string(),
+                        method: POST,
                         // auth_token: Some("my-token".to_string()),
                         auth_token: None,
                         // params: Some(vec![("foo".to_string(), "bar".to_string())]),
                         params: None,
-                        data_body: None,
+                        // Take in specifically from the component that has called this function with the data inside the fields.
+                        data_body: Some(RegistrationRequest { username: "danraine".to_owned(), email: "dan@gcpp.gold".to_owned(), password: "password".to_owned()}),
                     };
                     request.fetch_data().await;
                     data.set(request.data);

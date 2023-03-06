@@ -68,6 +68,9 @@ pub fn HeaderComponent() -> Html {
                                 <a href="/get_email_list">{"Email Data"}</a>
                             </li>
                             <li class="dropdown-link">
+                                <a href="/register">{"Registration Test"}</a>
+                            </li>
+                            <li class="dropdown-link">
                                 <a href="/hi-server">{"Hi Server"}</a>
                             </li>
                             <li class="dropdown-link">

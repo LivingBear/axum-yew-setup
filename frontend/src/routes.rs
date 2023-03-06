@@ -6,7 +6,7 @@ enum Route {
     #[at("/login")]
     LoginPage,
     #[at("/register")]
-    RegistrationPage,
+    RegisterData,
     #[at("/products")]
     ProductsPage,
     #[at("/services")]
@@ -38,6 +38,7 @@ fn switch(routes: Route) -> Html {
         Route::ProductsPage => html! {<ProductsPage />  },
         Route::ServicesPage => html! {<ServicesPage />  },
         Route::RegistrationPage => html! {<RegistrationPage />  },
+        Route::RegisterData => html! {<RegisterData />  },
         Route::ContactPage => html! {<ContactPage />  },
         Route::EmailPage => html! {<EmailPage />  },
         Route::AdminPage => html! {<AdminPage />  },
